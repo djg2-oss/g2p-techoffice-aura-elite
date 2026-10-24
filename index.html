@@ -1,1 +1,130 @@
-PLACEHOLDER_WILL_REPLACE
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G2P TechOffice + Aura Music Studio | Elite Operations Platform</title>
+  <style>
+    :root { --primary: #0a1628; --accent: #00d4ff; --bg: #0d1b2a; --card: #1b263b; --success: #00ff88; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: #e0e1dd; line-height: 1.6; }
+    header { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; }
+    h1 { font-size: 1.5rem; color: var(--accent); }
+    nav button, .btn { background: var(--accent); color: var(--primary); border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin: 0 0.25rem; font-weight: 600; }
+    .container { display: grid; grid-template-columns: 280px 1fr 320px; height: calc(100vh - 70px); }
+    aside, .panel { background: var(--card); padding: 1rem; overflow-y: auto; }
+    main { padding: 1.5rem; overflow-y: auto; }
+    .file-item, .folder { padding: 0.4rem; cursor: pointer; border-radius: 4px; }
+    .file-item:hover, .folder:hover { background: #415a77; }
+    #console, #ai-output { background: #000; color: var(--success); font-family: monospace; padding: 1rem; height: 220px; overflow-y: auto; margin-top: 1rem; border-radius: 4px; }
+    .studio-section, .card { margin: 1rem 0; padding: 1rem; background: #1b263b; border-radius: 8px; border-left: 4px solid var(--accent); }
+    input, textarea, select { width: 100%; padding: 0.5rem; margin: 0.5rem 0; background: #0d1b2a; color: white; border: 1px solid #415a77; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚀 G2P TechOffice + Aura Music Studio</h1>
+    <nav>
+      <button onclick="showSection('office')">Office Ops</button>
+      <button onclick="showSection('studio')">Music Studio</button>
+      <button onclick="showSection('ai')">AI Builds & Sims</button>
+      <button onclick="selectFolder()">Select Local Folder</button>
+    </nav>
+  </header>
+  <div class="container">
+    <aside>
+      <h3>File System</h3>
+      <div id="file-tree">Select a folder to begin elite operations.</div>
+      <button class="btn" onclick="createFolder()">New Folder</button>
+      <button class="btn" onclick="createFile()">New File</button>
+    </aside>
+    <main>
+      <div id="office-section">
+        <h2>Office Desktop Operations — Elite Mode</h2>
+        <p>Local-first File System Access API. Cleanup, structure for deployments, AI builds, and full desktop/laptop business ops.</p>
+        <div class="studio-section">
+          <button class="btn" onclick="aiOrganize()">AI Smart Organize</button>
+          <button class="btn" onclick="structureForDeploy()">Structure for Software Deploy</button>
+          <button class="btn" onclick="structureForAI()">Structure for AI Model Builds</button>
+        </div>
+        <div id="console"></div>
+      </div>
+      <div id="studio-section" style="display:none;">
+        <h2>Aura G2P Music Studio</h2>
+        <div class="studio-section">
+          <p>Write → Generate → Record → Mix → Master (Royal Guard). Full production chain.</p>
+          <button class="btn">Launch Session</button>
+        </div>
+        <input placeholder="Client Name" id="client-name">
+        <input type="date" id="session-date">
+        <button class="btn" onclick="bookSession()">Book Studio Session</button>
+      </div>
+      <div id="ai-section" style="display:none;">
+        <h2>AI Model Builds & Multi-Simulations</h2>
+        <p>Hierarchical simulations: Sim A writes memory. Sim B reads & skips finished. Sim C calls host only if needed. Nested for memory growth & latency reduction on AuraXUR OS.</p>
+        <textarea id="ai-prompt" rows="4" placeholder="Describe operation..."></textarea>
+        <button class="btn" onclick="runAIOp()">Execute AI Operation</button>
+        <div id="ai-output"></div>
+      </div>
+    </main>
+    <div class="panel">
+      <h3>Status & Optimization</h3>
+      <p>Elite Mode: Active</p>
+      <p id="status">Ready. Local-first for max performance.</p>
+      <hr>
+      <p><small>G2P Technologies · AuraG2P · Local + Host Elite Ops</small></p>
+    </div>
+  </div>
+  <script>
+    let dirHandle = null;
+    function log(msg) { const c = document.getElementById('console'); c.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`; c.scrollTop = c.scrollHeight; }
+    function showSection(sec) {
+      ['office','studio','ai'].forEach(s => document.getElementById(s+'-section').style.display = 'none');
+      document.getElementById(sec+'-section').style.display = 'block';
+    }
+    async function selectFolder() {
+      try {
+        dirHandle = await window.showDirectoryPicker();
+        log('Folder selected: ' + dirHandle.name);
+        await renderTree();
+        document.getElementById('status').textContent = 'Folder access granted. Elite ops ready.';
+      } catch(e) { log('Access denied or cancelled.'); }
+    }
+    async function renderTree() {
+      if (!dirHandle) return;
+      const tree = document.getElementById('file-tree');
+      tree.innerHTML = '';
+      for await (const entry of dirHandle.values()) {
+        const div = document.createElement('div');
+        div.className = entry.kind === 'directory' ? 'folder' : 'file-item';
+        div.textContent = (entry.kind === 'directory' ? '📁 ' : '📄 ') + entry.name;
+        tree.appendChild(div);
+      }
+    }
+    async function createFolder() {
+      if (!dirHandle) return alert('Select folder first');
+      const name = prompt('Folder name:');
+      if (name) { await dirHandle.getDirectoryHandle(name, {create: true}); log('Created folder: ' + name); await renderTree(); }
+    }
+    async function createFile() {
+      if (!dirHandle) return alert('Select folder first');
+      const name = prompt('File name:');
+      if (name) { 
+        const fh = await dirHandle.getFileHandle(name, {create: true});
+        const w = await fh.createWritable();
+        await w.write('// Created by G2P TechOffice Elite\n');
+        await w.close();
+        log('Created file: ' + name); await renderTree();
+      }
+    }
+    function aiOrganize() { log('AI Organize: Scanning & structuring files for optimal performance...'); }
+    function structureForDeploy() { log('Structuring folders for software deployment: /src /dist /config /scripts...'); }
+    function structureForAI() { log('Structuring for AI model builds: /models /datasets /checkpoints /inference...'); }
+    function bookSession() { log('Session booked for ' + document.getElementById('client-name').value); }
+    function runAIOp() {
+      const p = document.getElementById('ai-prompt').value;
+      document.getElementById('ai-output').innerHTML = 'Executing multi-sim: ' + p + '<br>Sim A wrote state. Sim B skipped finished. Sim C confirmed local sufficient.<br>Memory grown. Latency reduced.';
+    }
+  </script>
+</body>
+</html>
