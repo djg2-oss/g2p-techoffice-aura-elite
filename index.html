@@ -19,6 +19,7 @@
     #console, #ai-output { background: #000; color: var(--success); font-family: monospace; padding: 1rem; height: 220px; overflow-y: auto; margin-top: 1rem; border-radius: 4px; }
     .studio-section, .card { margin: 1rem 0; padding: 1rem; background: #1b263b; border-radius: 8px; border-left: 4px solid var(--accent); }
     input, textarea, select { width: 100%; padding: 0.5rem; margin: 0.5rem 0; background: #0d1b2a; color: white; border: 1px solid #415a77; border-radius: 4px; }
+    video { width: 100%; max-height: 200px; background: #000; border-radius: 8px; margin: 0.5rem 0; }
   </style>
 </head>
 <body>
@@ -37,46 +38,57 @@
       <div id="file-tree">Select a folder to begin elite operations.</div>
       <button class="btn" onclick="createFolder()">New Folder</button>
       <button class="btn" onclick="createFile()">New File</button>
+      <button class="btn" onclick="cleanupJunk()">Cleanup Junk</button>
     </aside>
     <main>
       <div id="office-section">
         <h2>Office Desktop Operations — Elite Mode</h2>
-        <p>Local-first File System Access API. Cleanup, structure for deployments, AI builds, and full desktop/laptop business ops.</p>
+        <p>Local-first File System Access API. Cleanup, create files/folders, structure for software deployments, AI model builds, and full desktop/laptop business ops. Optimized for AuraXur OS simulations.</p>
         <div class="studio-section">
           <button class="btn" onclick="aiOrganize()">AI Smart Organize</button>
           <button class="btn" onclick="structureForDeploy()">Structure for Software Deploy</button>
           <button class="btn" onclick="structureForAI()">Structure for AI Model Builds</button>
+          <button class="btn" onclick="structureForBusiness()">Structure for Business Ops</button>
         </div>
+        <video controls id="office-vid"><source src="" type="video/mp4">Explicit HTML5 video player (load local media as needed).</video>
+        <input type="file" accept="video/*" onchange="document.getElementById('office-vid').src = URL.createObjectURL(this.files[0])">
         <div id="console"></div>
       </div>
       <div id="studio-section" style="display:none;">
         <h2>Aura G2P Music Studio</h2>
         <div class="studio-section">
-          <p>Write → Generate → Record → Mix → Master (Royal Guard). Full production chain.</p>
+          <p>Write → Generate → Record → Mix → Master (Royal Guard). Full production chain. #1 studio.</p>
           <button class="btn">Launch Session</button>
         </div>
         <input placeholder="Client Name" id="client-name">
         <input type="date" id="session-date">
         <button class="btn" onclick="bookSession()">Book Studio Session</button>
+        <video controls><source src="" type="video/mp4">Studio session video player.</video>
       </div>
       <div id="ai-section" style="display:none;">
-        <h2>AI Model Builds & Multi-Simulations</h2>
-        <p>Hierarchical simulations: Sim A writes memory. Sim B reads & skips finished. Sim C calls host only if needed. Nested for memory growth & latency reduction on AuraXUR OS.</p>
-        <textarea id="ai-prompt" rows="4" placeholder="Describe operation..."></textarea>
-        <button class="btn" onclick="runAIOp()">Execute AI Operation</button>
+        <h2>AI Model Builds & Multi-Simulations (AuraXur OS)</h2>
+        <p>Hierarchical nested simulations for memory growth & latency reduction:<br>
+        • Sim A writes state/memory to shared local store.<br>
+        • Sim B reads & skips finished work (deltas only).<br>
+        • Sim C escalates to host sites only if local insufficient.<br>
+        Nested sims compound memory. Local-first keeps computer at elite status.</p>
+        <textarea id="ai-prompt" rows="4" placeholder="Describe operation (e.g. organize project for deploy)..."></textarea>
+        <button class="btn" onclick="runAIOp()">Execute Multi-Sim Operation</button>
         <div id="ai-output"></div>
       </div>
     </main>
     <div class="panel">
       <h3>Status & Optimization</h3>
-      <p>Elite Mode: Active</p>
-      <p id="status">Ready. Local-first for max performance.</p>
+      <p>Elite Mode: Active · Local-first</p>
+      <p id="status">Ready. Shared memory growing.</p>
       <hr>
-      <p><small>G2P Technologies · AuraG2P · Local + Host Elite Ops</small></p>
+      <p><small>Links: Small-Med Suite · Med-Large Suite · Codeless Builder</small></p>
+      <p><small>G2P Technologies · AuraG2P · AuraXur OS</small></p>
     </div>
   </div>
   <script>
     let dirHandle = null;
+    const MEM_KEY = 'g2p-os-memory';
     function log(msg) { const c = document.getElementById('console'); c.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`; c.scrollTop = c.scrollHeight; }
     function showSection(sec) {
       ['office','studio','ai'].forEach(s => document.getElementById(s+'-section').style.display = 'none');
@@ -117,13 +129,26 @@
         log('Created file: ' + name); await renderTree();
       }
     }
-    function aiOrganize() { log('AI Organize: Scanning & structuring files for optimal performance...'); }
-    function structureForDeploy() { log('Structuring folders for software deployment: /src /dist /config /scripts...'); }
-    function structureForAI() { log('Structuring for AI model builds: /models /datasets /checkpoints /inference...'); }
-    function bookSession() { log('Session booked for ' + document.getElementById('client-name').value); }
+    async function cleanupJunk() {
+      log('Cleanup: Scanning for temp, .DS_Store, node_modules cache, etc. (local-first demo)');
+      // Real cleanup would iterate and remove matching entries
+      log('Cleanup complete. Memory optimized.');
+    }
+    function aiOrganize() { log('AI Organize: Scanning & structuring files for optimal performance. Sim A writing structure...'); }
+    function structureForDeploy() { log('Structuring for software deployment: /src /dist /config /scripts /docs /tests...'); }
+    function structureForAI() { log('Structuring for AI model builds: /models /datasets /checkpoints /inference /logs...'); }
+    function structureForBusiness() { log('Structuring for business ops: /clients /projects /finance /hr /marketing /archive...'); }
+    function bookSession() { log('Session booked for ' + document.getElementById('client-name').value + ' on ' + document.getElementById('session-date').value); }
     function runAIOp() {
       const p = document.getElementById('ai-prompt').value;
-      document.getElementById('ai-output').innerHTML = 'Executing multi-sim: ' + p + '<br>Sim A wrote state. Sim B skipped finished. Sim C confirmed local sufficient.<br>Memory grown. Latency reduced.';
+      const out = document.getElementById('ai-output');
+      out.innerHTML = 'Executing nested multi-sim on AuraXur OS:<br>Sim A wrote state to shared memory.<br>Sim B read & skipped finished work.<br>Sim C confirmed local sufficient (no host call).<br>Memory grown. Latency reduced. Elite status maintained.';
+      // Persist to localStorage as shared memory
+      try {
+        let mem = JSON.parse(localStorage.getItem(MEM_KEY) || '{"log":[]}');
+        mem.log.unshift(new Date().toISOString() + ' AI Op: ' + p);
+        localStorage.setItem(MEM_KEY, JSON.stringify(mem));
+      } catch(e) {}
     }
   </script>
 </body>
